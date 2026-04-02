@@ -13,7 +13,7 @@ RUN openssl req -x509 -nodes \
 RUN mkdir -p /var/run/nginx && \
     mkdir -p /var/www/html
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod 755 /var/www/html
 RUN chown -R www-data:www-data /var/www/html
