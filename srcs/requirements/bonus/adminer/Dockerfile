@@ -1,17 +1,18 @@
 FROM debian:bullseye
 
 RUN apt update && apt upgrade -y && \
-    apt install -y php7.4 php7.4-fpm php7.4-mysql wget && \
+    apt install -y php7.4 php7.4-fpm php7.4-mysql wget curl && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # Télécharge Adminer
-RUN wget https://www.adminer.org/latest.php -O /var/www/html/adminer.php
+RUN curl -L https://www.adminer.org/latest.php -o /adminer.php
 
-RUN chown -R www-data:www-data /var/www/html
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 COPY tools/adminer.sh /adminer.sh
+
 RUN chmod +x /adminer.sh
 
-EXPOSE 8080
+EXPOSE 9000
 
 ENTRYPOINT ["/adminer.sh"]

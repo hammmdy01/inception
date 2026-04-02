@@ -34,5 +34,12 @@ fi
 # Crée le dossier nécessaire à PHP-FPM
 mkdir -p /run/php
 
+# Active le plugin Redis sur WordPress
+wp plugin install redis-cache --activate --allow-root --path=/var/www/wordpress
+wp config set WP_REDIS_HOST redis --allow-root --path=/var/www/wordpress
+wp config set WP_REDIS_PORT 6379 --allow-root --path=/var/www/wordpress
+wp plugin update --all --allow-root --path=/var/www/wordpress
+wp redis enable --allow-root --path=/var/www/wordpress
+
 # Lance PHP-FPM en foreground
 exec /usr/sbin/php-fpm7.4 -F

@@ -48,7 +48,7 @@ services:
       - "443:443"
       - "8080:8080"
     restart: unless-stopped
-  
+
   adminer:
     container_name: adminer
     build:
@@ -60,7 +60,31 @@ services:
       - mariadb
     restart: unless-stopped
     expose:
-      - "8080"
+      - "9000"
+    volumes:
+      - adminer:/var/www/html
+
+  website:
+    container_name: website
+    build:
+      context: requirements/bonus/website
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    build:
+      context: requirements/bonus/redis
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    restart: unless-stopped
+    expose:
+      - "6379"
 
 volumes:
   wordpress:
@@ -77,6 +101,12 @@ volumes:
       o: bind
       device: /home/hazali/data/mariadb
 
+  adminer:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/hazali/data/adminer
 networks:
   inception:
     driver: bridge
